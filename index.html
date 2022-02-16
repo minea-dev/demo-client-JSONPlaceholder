@@ -3,9 +3,8 @@
 
 <head>
     <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Blog JSONPlaceHolder</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Blog JSONPlaceholder</title>
     <link rel="stylesheet" href="css/main.css">
     <script src="node_modules/vue/dist/vue.global.js"></script>
     <script defer src="js/main.js"></script>
@@ -16,13 +15,14 @@
         <div class="container">
             <h1>Blog JSONPlaceHolder</h1>
             <section class="article-list">
-                <article v-for="post in posts">
+                <article v-for="post in getPostPag()" :class="{'loading' : loading }">
                     <h2>{{ post.title }}</h2>
-                    <footer>Author 👱🏻: {{ post.userId }}</footer>
+                    <footer v-if="users.length > 0">Author 👱🏻: {{ getNameUser(post.userId) }}</footer>
                 </article>
                 <div class="paginator">
-                    <button>👈</button>
-                    <button>👉</button>
+                    <button v-if="pag != 1" @click="prevPag">👈</button>
+                    <span>{{ pag }}</span>
+                    <button v-if="pag != totalpages" @click="nextPag">👉</button>
                 </div>
             </section>
         </div>
