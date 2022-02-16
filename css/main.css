@@ -22,3 +22,11 @@ body {
     border: 0;
     font-size: 2rem;
 }
+
+button {
+    cursor: pointer;
+}
+
+h2 {
+    cursor: pointer;
+}

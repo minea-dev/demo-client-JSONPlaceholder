@@ -13,11 +13,19 @@
 <body>
     <main id="app">
         <div class="container">
-            <h1>Blog JSONPlaceHolder</h1>
-            <section class="article-list">
+            <h1>🌸 Blog JSONPlaceHolder 🌸</h1>
+            <section>
                 <article v-for="post in getPostPag()" :class="{'loading' : loading }">
-                    <h2>{{ post.title }}</h2>
-                    <footer v-if="users.length > 0">Author 👱🏻: {{ getNameUser(post.userId) }}</footer>
+                    <h2>{{ capitalizationFirstLetter(post.title) }}</h2>
+                    <footer v-if="users.length > 0">Author 🐱: {{ getNameUser(post.userId) }}</footer>
+                    <div>
+                        <div>{{capitalizationFirstLetter(post.body)}}</div>
+                        <div v-for="comment in getArticleComments(post.id)">
+                            <h4>{{comment.name}}</h4>
+                            <a href="mailto:">{{comment.email}}</a>
+                            <p>{{comment.body}}</p>
+                        </div>
+                    </div>
                 </article>
                 <div class="paginator">
                     <button v-if="pag != 1" @click="prevPag">👈</button>

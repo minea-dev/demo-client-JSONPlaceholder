@@ -1,8 +1,10 @@
 Vue.createApp({
     data() {
         return {
-            urlAPIPost: 'https://jsonplaceholder.typicode.com/posts',
-            urlAPIUsers: 'https://jsonplaceholder.typicode.com/users',
+            URL_API: 'https://jsonplaceholder.typicode.com/',
+            POST: 'posts',
+            USER: 'users',
+            COMMENT: 'comments',
             loading: true,
             posts: [{
                     "userId": 1,
@@ -36,18 +38,33 @@ Vue.createApp({
                 }
             ],
             users: [],
+            comments: [],
             pag: 1,
             maxElementsPag: 5,
             totalpages: 0
         }
     },
     methods: {
+        getArticleComments: function(id) {
+            return this.comments.filter(com => id === com.postId);
+        },
+        capitalizationFirstLetter: function(str) {
+            return str.charAt(0).toUpperCase() + str.slice(1);
+        },
         getNameUser: function(id) {
             return this.users.filter(user => id === user.id)[0].name;
         },
+        getComments: async function() {
+            // Pedimos la informacion
+            const fetchComments = await fetch(this.URL_API + this.COMMENT);
+            // Convertimos a JSON el texto plano
+            const jsonComments = await fetchComments.json();
+            // Guardamos comments
+            this.comments = jsonComments;
+        },
         getUsers: async function() {
             // Pedimos la informacion
-            const fetchUsers = await fetch(this.urlAPIUsers);
+            const fetchUsers = await fetch(this.URL_API + this.USER);
             // Convertimos a JSON el texto plano
             const jsonUsers = await fetchUsers.json();
             // Guardamos users
@@ -67,7 +84,7 @@ Vue.createApp({
         getPosts: async function() {
             this.loading = true;
             // Pedimos la informacion
-            const fetchPosts = await fetch(this.urlAPIPost);
+            const fetchPosts = await fetch(this.URL_API + this.POST);
             // Convertimos a JSON el texto plano
             const jsonPosts = await fetchPosts.json();
             // Guardamos post
@@ -83,5 +100,6 @@ Vue.createApp({
         // Cargamos la informacion
         this.getPosts();
         this.getUsers();
+        this.getComments();
     }
 }).mount('#app')
