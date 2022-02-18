@@ -61,7 +61,7 @@
                     <label for="buscador">Filtrar por título</label>
                     <input id="buscador" name="buscador" type="search" v-model="search">
                 </form>
-                <article v-for="post in getPostPag()" :class="{'loading' : loading }">
+                <article v-if="getPostPag().length > 0" v-for="post in getPostPag()" :class="{'loading' : loading }">
                     <h2>{{ post.title }}</h2>
                     <button @click="toggleBody(post.id)">
                         Ver <span v-if="!showBodySet.has(post.id)">mas</span><span v-else>menos</span>
@@ -79,10 +79,14 @@
 
                     <footer v-if="users.length > 0">Author 👱🏻: {{ getUserName(post.userId) }}</footer>
                 </article>
-                <div class="paginator">
-                    <button v-if="pag != 1" @click="prevPag">👈</button>
+                <h2 v-else>No hay resultados</h2>
+                <div v-if="getPostPag().length > 0" class="paginator" ref="paginator">
+                    <!--
+                        <button v-if="pag != 1" @click="prevPag">👈</button>
                     <span>{{ pag }}</span>
                     <button v-if="pag != totalpages" @click="nextPag">👉</button>
+                     -->
+                    <button v-if="pag != totalpages" @click="nextPag">Cargar mas</button>
                 </div>
             </section>
         </div>

@@ -203,7 +203,7 @@ Vue.createApp({
         getPostPag: function() {
             const posInicio = (this.pag - 1) * this.maxElementsPag;
             const posFinal = posInicio + this.maxElementsPag;
-            return this.searchResult.slice(posInicio, posFinal);
+            return this.searchResult.slice(0, posFinal);
         },
         getPosts: async function() {
             this.loading = true;
@@ -245,6 +245,21 @@ Vue.createApp({
         },
         addRealHeight: function(el) {
             el.style.height = `${el.scrollHeight}px`;
+        },
+        addPaginatorInfinito: function() {
+            // Creamos un objeto IntersectionObserver
+            const observerPaginator = new IntersectionObserver((entries) => {
+                // Comprobamos todas las intesecciones. En el ejemplo solo existe una: cuadrado
+                entries.forEach((entry) => {
+                    // Si es observable, entra
+                    if (entry.isIntersecting) {
+                        this.nextPag();
+                    }
+                });
+            });
+
+            // Añado a mi Observable que quiero observar. En este caso el cuadrado
+            observerPaginator.observe(this.$refs.paginator);
         }
     },
     watch: {
@@ -258,5 +273,6 @@ Vue.createApp({
         this.getPosts();
         this.getUsers(this.urlAPIUsers);
         this.getComments(this.urlAPIComments);
+        this.addPaginatorInfinito();
     }
 }).mount('#app')
