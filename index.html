@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!--<!DOCTYPE html>
 <html lang="en">
 
 <head>
@@ -18,7 +18,8 @@
                 <article v-for="post in getPostPag()" :class="{'loading' : loading }">
                     <h2>{{ capitalizationFirstLetter(post.title) }}</h2>
                     <footer v-if="users.length > 0">Author 🐱: {{ getNameUser(post.userId) }}</footer>
-                    <div>
+                    <button @click="toggleBody">Show article</button>
+                    <div v-if="showBody">
                         <div>{{capitalizationFirstLetter(post.body)}}</div>
                         <div v-for="comment in getArticleComments(post.id)">
                             <h4>{{comment.name}}</h4>
@@ -26,6 +27,57 @@
                             <p>{{comment.body}}</p>
                         </div>
                     </div>
+                </article>
+                <div class="paginator">
+                    <button v-if="pag != 1" @click="prevPag">👈</button>
+                    <span>{{ pag }}</span>
+                    <button v-if="pag != totalpages" @click="nextPag">👉</button>
+                </div>
+            </section>
+        </div>
+    </main>
+</body>
+
+</html> -->
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Blog JSONPlaceHolder</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="css/main.css">
+    <script src="node_modules/vue/dist/vue.global.js"></script>
+    <script defer src="js/main.js"></script>
+</head>
+
+<body>
+    <main id="app">
+        <div class="container">
+            <h1>Blog JSONPlaceHolder</h1>
+            <section class="article-list">
+                <form>
+                    <label for="buscador">Filtrar por título</label>
+                    <input id="buscador" name="buscador" type="search" v-model="search">
+                </form>
+                <article v-for="post in getPostPag()" :class="{'loading' : loading }">
+                    <h2>{{ post.title }}</h2>
+                    <button @click="toggleBody(post.id)">
+                        Ver <span v-if="!showBodySet.has(post.id)">mas</span><span v-else>menos</span>
+                    </button>
+
+                    <transition @before-enter="addHeightZero" @enter="addRealHeight" @before-leave="addRealHeight" @leave="addHeightZero" :css="true">
+                        <div v-if="showBodySet.has(post.id)" class="content-container">
+                            <p>{{ post.body }}</p>
+                            <article v-for="comment in getCommentsRelatedToPost(post.id)">
+                                <h3>{{ comment.name }}</h3>
+                                <p>{{ comment.body }}</p>
+                            </article>
+                        </div>
+                    </transition>
+
+                    <footer v-if="users.length > 0">Author 👱🏻: {{ getUserName(post.userId) }}</footer>
                 </article>
                 <div class="paginator">
                     <button v-if="pag != 1" @click="prevPag">👈</button>
